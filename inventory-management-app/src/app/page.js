@@ -105,6 +105,16 @@ const removeItem = async (item) => {
   await updateInventory()
     
 }
+const addQuant = async(item) => {
+  const docRef = doc(collection(firestore, 'inventory'), item)
+  const docSnap = await getDoc(docRef)
+  if (docSnap.exists()) {
+    const { quantity } = docSnap.data()
+      await setDoc(docRef, { quantity: quantity + 1 })
+  }
+  await updateInventory()
+
+}
 
 const handleOpen = () => setOpen(true)
 const handleClose = () => setOpen(false)
@@ -208,6 +218,9 @@ const handleClose = () => setOpen(false)
               <Typography variant={'h3'} color={'#333'} textAlign={'center'}>
                 Quantity: {quantity}
               </Typography>
+              <Button variant="contained" onClick={() => addQuant(name) }>
+                Add
+              </Button>
               <Button variant="contained" onClick={() => removeItem(name)}>
                 Remove
               </Button>
